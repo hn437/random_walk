@@ -32,16 +32,16 @@ Apply the best practices in scientific computing to make the code more readable,
 ### Additional requirements: 
 
 1. Create three different types of walkers, e.g. a "fast walker" which has a bigger step size. 
-2. Add a "landscape" in which the random walkers are walking in which contains obstacles which the walkers cannot traverse (e.g. a lake)
-3. Create another feature of your own.
+2. Add a "landscape" in which the random walkers are walking in which contains obstacles which the walkers cannot cross (e.g. a lake)
+3. Invent and implement another functionality of your own.
 
 Be creative here! :) 
 
 ## Code Review 
 
-Review the code of another group: 
+Review the code of another group: (tuesday afternoon or wednesday morning)
 
 1. Does it work properly? Try to make it fail!
 2. Are the best-practices implemented in the code?
-3. Is the documentation clear?
+3. Is the documentation clear? 
 4. Can you adapt the code easily? E.g. try to create a new type of random walker which moves two cells per iteration.  
