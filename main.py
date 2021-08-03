@@ -12,7 +12,8 @@ import matplotlib.pyplot as plt
 
 def create_walkers(number_of_steps, number_of_walkers):
     """
-
+    Creates a list of numpy arrays which each hold the coordinates of a walker. The lenght
+    of the list is defined by the number of walkers to be specified
     :param number_of_steps:
     :param number_of_walkers:
     :return:
@@ -97,8 +98,8 @@ def main():
         number_of_walkers = int(sys.argv[2])
         outputfilename = sys.argv[3]
 
-        assert number_of_steps > 1
-        assert number_of_walkers > 0
+        assert number_of_steps > 1, "'{}' must be greater than 0".format(number_of_steps - 1)
+        assert number_of_walkers > 0, "'{}' must be greater than 1".format(number_of_walkers)
     except ValueError as err:
         print("Error: one of the inputs was not correctly specified.\n"
               "The Input must be specified as 'python main.py number_of_steps "
