@@ -3,7 +3,7 @@
 The random walker creates a random path for a number of steps and number of walkers, specified by the user. The output is an image, which shows the walk for every walker in different
 plots.
 
-## Instrucctions to the user 
+## Instructions to the user 
 
 1. Clone the repository from Github 
 2. Move to the cloned repository via the command line 
