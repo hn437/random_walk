@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""A Random Walk Simulation
-"""
+"""A Random Walk Simulation """
 
 # Python code for 2D random walk.
+# Source: https://www.geeksforgeeks.org/random-walk-implementation-python/
 import numpy
 import matplotlib.pyplot as plt
 import random
@@ -36,5 +36,5 @@ for i in range(1, n):
 # plotting the walk
 plt.title("Random Walk ($n = " + str(n) + "$ steps)")
 plt.plot(x, y)
-plt.savefig("rand_walk"+str(n)+".png",bbox_inches="tight",dpi=600)
+plt.savefig("./rand_walk_{}.png".format(n))
 plt.show()
