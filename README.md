@@ -2,6 +2,9 @@
 
 This is a **group exercise**, so you should be working in pairs of two students. 
 
+The Goal is to **practise writing readable, maintainable and reliable code collaboratively.**
+
+
 ## Group Exercise
 
 1. One student of your group forks the code from [https://github.com/advanced-geoscripting-2021/random_walker.git](https://github.com/advanced-geoscripting-2021/random_walker.git)
