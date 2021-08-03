@@ -11,7 +11,7 @@ plots.
 4. You need to call the script with python, writing: python walker.py ... 
 5. For example: python walker.py 10 4 ./test_image.png
 
-		10		= number of steps
+		100000		= number of steps
 
 
 		4		= number of walkers
