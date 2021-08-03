@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 """A Random Walk Simulation For Multiple Walkers"""
 
-
 # Python code for 2D random walk.
 # Source: https://www.geeksforgeeks.org/random-walk-implementation-python/
 import sys
@@ -29,7 +28,7 @@ def create_walkers(number_of_steps, number_of_walkers):
 
     return scene
 
-
+  
 def calculate_the_path(walker, number_of_steps):
     """
     Calculates the path the walker walks
