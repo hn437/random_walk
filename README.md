@@ -1,9 +1,8 @@
 # Random Walk Simulation
 
-This is a **group exercise**, so you should be working in pairs of two students. 
+This is a **group exercise**, so you should be working in pairs of two students. It's **30% of your final grade**. 
 
 The Goal is to **practise writing readable, maintainable and reliable code collaboratively.**
-
 
 ## Group Exercise
 
