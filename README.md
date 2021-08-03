@@ -11,10 +11,10 @@ plots
 4. You need to call the script with python, writing: python main.py ... 
 5. For example: python main.py 10 4 ./test_image.png
 
-10		= number of steps
+		10		= number of steps
 
-4		= number of walkers
+		4		= number of walkers
 
-./test_image.pn = name of the outputfile 
+		./test_image.pn = name of the outputfile 
 
 
