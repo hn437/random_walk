@@ -22,3 +22,7 @@ plots.
 Example for setting the parameters: 
 
 ![image](https://github.com/hn437/random_walk/blob/yannik/screenshot_readme.PNG)
+
+Example for the output:
+
+![image](https://github.com/hn437/random_walk/blob/yannik/output.png)
