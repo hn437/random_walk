@@ -13,8 +13,10 @@ plots.
 
 		10		= number of steps
 
+
 		4		= number of walkers
 
 		./test_image.pn = name of the outputfile 
 
 
+![image](https://github.com/hn437/random_walk/blob/yannik/screenshot_readme.PNG)
