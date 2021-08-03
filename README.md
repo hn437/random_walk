@@ -19,7 +19,7 @@ This is a **group exercise**, so you should be working in pairs of two students.
 
 In this repo you find a basic implementation of a [random walk simulation](https://en.wikipedia.org/wiki/Random_walk) in 2-dimensional space taken from [this blogpost](https://www.geeksforgeeks.org/random-walk-implementation-python/). Running the code yields an image which shows the path of the random walk. 
 
-![random_walker](rand_walk100000.png)
+![random_walk](rand_walk_100000.png)
 
 The program works but it is not very readable. In addition, you should **extend the program based on the requirements listed below.
 
