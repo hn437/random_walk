@@ -5,6 +5,7 @@
 # Python code for 2D random walk.
 # Source: https://www.geeksforgeeks.org/random-walk-implementation-python/
 import sys
+import math
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -28,7 +29,7 @@ def create_walkers(number_of_steps, number_of_walkers):
 
     return scene
 
-  
+
 def calculate_the_path(walker, number_of_steps):
     """
     Calculates the path the walker walks
@@ -42,7 +43,7 @@ def calculate_the_path(walker, number_of_steps):
 
     # calculate new coordinates for each step
     for stepnumber in range(1, number_of_steps):
-        direction_of_step = np.random.randint(1, 4)
+        direction_of_step = np.random.randint(1, 5)
         if direction_of_step == 1:      # east
             x_coord[stepnumber] = x_coord[stepnumber - 1] + 1
             y_coord[stepnumber] = y_coord[stepnumber - 1]
@@ -72,10 +73,10 @@ def plot_the_paths(list_of_walkers, outputfilename):
         columns_of_plots = 1
     else:
         columns_of_plots = 2
-    rows_of_plots = round(len(list_of_walkers)/2)
+    rows_of_plots = math.ceil(len(list_of_walkers)/2)
 
     # create the subplots
-    figure, axis = plt.subplots(rows_of_plots, columns_of_plots)
+    figure, axis = plt.subplots(rows_of_plots, columns_of_plots, squeeze=False)
     for counter in enumerate(list_of_walkers):
         # get the coordinates of this walker, get its subplot and plot the path in it
         x_coords = counter[1][:, 0]
@@ -90,7 +91,7 @@ def plot_the_paths(list_of_walkers, outputfilename):
         axis[row, column].plot(x_coords, y_coords)
         axis[row, column].set_title(f'Walker {counter[0]+1}')
 
-    if len(list_of_walkers) % 2 != 0:
+    if len(list_of_walkers) % 2 != 0 and len(list_of_walkers) != 1:
         # if the number of walkers is odd, delete the last (unused) subplot
         figure.delaxes(axis[(rows_of_plots - 1), 1])
 
