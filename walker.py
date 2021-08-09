@@ -33,7 +33,7 @@ def create_walkers(walking_time: int, number_of_usual_walkers: int,
     return scene
 
 
-def calculate_the_path(number_of_steps: int) -> np.ndarray:
+def calculate_the_path(number_of_steps: int) -> tuple:
     """
     Calculates the path the walker walks
     :param number_of_steps: the number of steps the walker takes
@@ -123,7 +123,7 @@ class UsualWalker:
         self.walking_speed = 1
         self.number_of_steps = number_of_steps
         self.x_coordinates, self.y_coordinates, self.starting_position, \
-        self.ending_position = calculate_the_path(self.number_of_steps * self.walking_speed)
+            self.ending_position = calculate_the_path(self.number_of_steps * self.walking_speed)
 
 
 class FastWalker:
@@ -132,7 +132,7 @@ class FastWalker:
         self.walking_speed = 2
         self.number_of_steps = number_of_steps
         self.x_coordinates, self.y_coordinates, self.starting_position, \
-        self.ending_position = calculate_the_path(self.number_of_steps * self.walking_speed)
+            self.ending_position = calculate_the_path(self.number_of_steps * self.walking_speed)
 
 
 def main():
