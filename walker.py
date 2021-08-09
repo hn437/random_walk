@@ -10,7 +10,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def create_walkers(walking_time: int, number_of_usual_walkers: int, number_of_fast_walkers: int) -> list:
+def create_walkers(walking_time: int, number_of_usual_walkers: int,
+                   number_of_fast_walkers: int) -> list:
     """
     Creates a list of all walker objects.
     :param walking_time: the 'time' each walker walks and therefore (depending on it's
@@ -24,10 +25,10 @@ def create_walkers(walking_time: int, number_of_usual_walkers: int, number_of_fa
     scene = []
     for _ in range(number_of_usual_walkers):
         # create the array of a walker and add it to the scene-list
-        scene.append(Usual_walker(walking_time))
+        scene.append(UsualWalker(walking_time))
     for _ in range(number_of_fast_walkers):
         # create the array of a walker and add it to the scene-list
-        scene.append(Fast_walker(walking_time))
+        scene.append(FastWalker(walking_time))
 
     return scene
 
@@ -98,8 +99,10 @@ def plot_the_paths(list_of_walkers: list, outputfilename: str) -> None:
             column = 1
 
         axis[row, column].plot(walker[1].x_coordinates, walker[1].y_coordinates)
-        axis[row, column].scatter(walker[1].starting_position[0], walker[1].starting_position[1], label='Startposition')
-        axis[row, column].scatter(walker[1].ending_position[0], walker[1].ending_position[1], marker='^', label='Endposition')
+        axis[row, column].scatter(walker[1].starting_position[0],
+                                  walker[1].starting_position[1], label='Startposition')
+        axis[row, column].scatter(walker[1].ending_position[0],
+                                  walker[1].ending_position[1], marker='^', label='Endposition')
         axis[row, column].legend()
         axis[row, column].set_title(f'Walker {walker[0]+1}')
 
@@ -114,20 +117,22 @@ def plot_the_paths(list_of_walkers: list, outputfilename: str) -> None:
     plt.show()
 
 
-class Usual_walker:
+class UsualWalker:
     """Represents a walker at usual speed"""
     def __init__(self, number_of_steps: int):
         self.walking_speed = 1
         self.number_of_steps = number_of_steps
-        self.x_coordinates, self.y_coordinates, self.starting_position, self.ending_position = calculate_the_path(self.number_of_steps * self.walking_speed)
+        self.x_coordinates, self.y_coordinates, self.starting_position, \
+        self.ending_position = calculate_the_path(self.number_of_steps * self.walking_speed)
 
 
-class Fast_walker:
+class FastWalker:
     """Represents a walker at fast speed"""
     def __init__(self, number_of_steps: int):
         self.walking_speed = 2
         self.number_of_steps = number_of_steps
-        self.x_coordinates, self.y_coordinates, self.starting_position, self.ending_position = calculate_the_path(self.number_of_steps * self.walking_speed)
+        self.x_coordinates, self.y_coordinates, self.starting_position, \
+        self.ending_position = calculate_the_path(self.number_of_steps * self.walking_speed)
 
 
 def main():
