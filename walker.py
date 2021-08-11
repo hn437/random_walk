@@ -19,14 +19,15 @@ def create_walkers(
     """
     Creates a list of all walker objects.
     :param walking_time: the 'time' each walker walks and therefore (depending on it's
-    respective speed) the number of steps the walker will make
+        respective speed) the number of steps the walker will make
     :param number_of_usual_walkers: the number of usual walkers defines the number of
-    objects of this respective class which will be appended to the scene
+        objects of this respective class which will be appended to the scene
     :param number_of_fast_walkers:the number of fast walkers defines the number of
-    objects of this respective class which will be appended to the scene
-    :param number_of_running_walkers: the number of running walkers defines the number of
-    objects of this respective class which will be appended to the scene
-    :return: a list, the 'scene' which contains all walkers, so all objects and their coordinates
+        objects of this respective class which will be appended to the scene
+    :param number_of_running_walkers: the number of running walkers defines the number
+        of objects of this respective class which will be appended to the scene
+    :return: a list, the 'scene' which contains all walkers, so all objects and their
+        coordinates
     """
     scene = []
     for _ in range(number_of_usual_walkers):
@@ -46,7 +47,7 @@ def calculate_the_path(number_of_steps: int) -> tuple:
     Calculates the path the walker walks
     :param number_of_steps: the number of steps the walker takes
     :return: all x- and all y- coordinates of points the walker visits as well as its
-    starting and endposition
+        starting and endposition
     """
     # create random locations
     walkers_locations = np.random.randint(
@@ -81,7 +82,7 @@ def plot_the_paths(list_of_walkers: list, outputfilename: str) -> None:
     """
     Creates the plots of the calculated paths of the walkers
     :param list_of_walkers: A list holding the walkers objects. Each object holds the
-    coordinates of the respective path the walker walked.
+        coordinates of the respective path the walker walked.
     :param outputfilename: The file which will be created with the plotted paths
     """
     # define the number of rows and columns of subplots
@@ -116,35 +117,24 @@ def plot_the_paths(list_of_walkers: list, outputfilename: str) -> None:
                 [start_coordinates[0], end_coordinates[0]],
                 [start_coordinates[1], end_coordinates[1]],
             )
-            axis[row, column].scatter(
-                walker[1].get_start_point()[0],
-                walker[1].get_start_point()[1],
-                label="Startposition",
-            )
-            axis[row, column].scatter(
-                walker[1].get_end_point()[0],
-                walker[1].get_end_point()[1],
-                label="Endposition",
-            )
-            axis[row, column].legend()
             axis[row, column].set_title(
                 f"Walker {walker[0] + 1} took a plane, "
                 f"because the distance was too long"
             )
         else:
             axis[row, column].plot(walker[1].x_coordinates, walker[1].y_coordinates)
-            axis[row, column].scatter(
-                walker[1].get_start_point()[0],
-                walker[1].get_start_point()[1],
-                label="Startposition",
-            )
-            axis[row, column].scatter(
-                walker[1].get_end_point()[0],
-                walker[1].get_end_point()[1],
-                label="Endposition",
-            )
-            axis[row, column].legend()
             axis[row, column].set_title(f"Walker {walker[0] + 1} is {walker_type}")
+        axis[row, column].scatter(
+            walker[1].get_start_point()[0],
+            walker[1].get_start_point()[1],
+            label="Startposition",
+        )
+        axis[row, column].scatter(
+            walker[1].get_end_point()[0],
+            walker[1].get_end_point()[1],
+            label="Endposition",
+        )
+        axis[row, column].legend()
 
     if len(list_of_walkers) % 2 != 0 and len(list_of_walkers) != 1:
         # if the number of walkers is odd, delete the last (unused) subplot
@@ -242,7 +232,7 @@ class RunningWalker:
 
 
 def main():
-    """The main program. Reads in the user definitions, creates the scene and plots it"""
+    """The main program. Assigns the user definitions, creates the scene and plots it"""
     try:
         # read in specifications defined by the user
         """walking_time = int(sys.argv[1]) + 1
