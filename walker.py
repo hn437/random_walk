@@ -128,11 +128,13 @@ def plot_the_paths(list_of_walkers: list, outputfilename: str) -> None:
             walker[1].get_start_point()[0],
             walker[1].get_start_point()[1],
             label="Startposition",
+            marker='o'
         )
         axis[row, column].scatter(
             walker[1].get_end_point()[0],
             walker[1].get_end_point()[1],
             label="Endposition",
+            marker='^'
         )
         axis[row, column].legend()
 
@@ -156,7 +158,7 @@ class UsualWalker:
         (
             self.x_coordinates,
             self.y_coordinates,
-        ) = calculate_the_path(self.walking_time * self.walking_speed)
+        ) = calculate_the_path(self.walking_time * self.walking_speed + 1)
 
     def get_start_point(self) -> list:
         """
@@ -184,7 +186,7 @@ class FastWalker:
         (
             self.x_coordinates,
             self.y_coordinates,
-        ) = calculate_the_path(self.walking_time * self.walking_speed)
+        ) = calculate_the_path(self.walking_time * self.walking_speed + 1)
 
     def get_start_point(self) -> list:
         """
@@ -212,7 +214,7 @@ class RunningWalker:
         (
             self.x_coordinates,
             self.y_coordinates,
-        ) = calculate_the_path(self.walking_time * self.walking_speed)
+        ) = calculate_the_path(self.walking_time * self.walking_speed + 1)
 
     def get_start_point(self) -> list:
         """
@@ -235,15 +237,15 @@ def main():
     """The main program. Assigns the user definitions, creates the scene and plots it"""
     try:
         # read in specifications defined by the user
-        """walking_time = int(sys.argv[1]) + 1
+        """walking_time = int(sys.argv[1])
         number_of_usual_walkers = int(sys.argv[2])
         number_of_fast_walkers = int(sys.argv[3])
         outputfilename = sys.argv[4]"""
 
-        walking_time = 10000 + 1
-        number_of_usual_walkers = 2
+        walking_time = 1
+        number_of_usual_walkers = 0
         number_of_fast_walkers = 1
-        number_of_running_walkers = 1
+        number_of_running_walkers = 0
         outputfilename = r"D:\Desktop\test_walker.png"
 
         number_of_walkers = (
@@ -251,9 +253,14 @@ def main():
         )
 
         assert (
-            walking_time > 1
+            walking_time >= 1
         ), "walking_time must be greater than '0'. " "You stated '{}'".format(
             walking_time - 1
+        )
+        assert (
+            number_of_usual_walkers >= 0
+        ), "number_of_walkers must be greater than '1'. " "You stated '{}'".format(
+            number_of_walkers
         )
         assert (
             number_of_walkers > 0
