@@ -102,9 +102,9 @@ def plot_the_paths(list_of_walkers: list, outputfilename: str) -> None:
         else:
             column = 1
         if walker[1].walking_speed == 1:
-            walker_type = "usual"
+            walker_type = "walking at usual speed"
         elif walker[1].walking_speed == 2:
-            walker_type = "fast"
+            walker_type = "walking fast"
         elif walker[1].walking_speed == 4:
             walker_type = "running"
         start_coordinates = walker[1].get_start_point()
@@ -128,13 +128,13 @@ def plot_the_paths(list_of_walkers: list, outputfilename: str) -> None:
             walker[1].get_start_point()[0],
             walker[1].get_start_point()[1],
             label="Startposition",
-            marker='o'
+            marker="o",
         )
         axis[row, column].scatter(
             walker[1].get_end_point()[0],
             walker[1].get_end_point()[1],
             label="Endposition",
-            marker='^'
+            marker="^",
         )
         axis[row, column].legend()
 
@@ -242,10 +242,10 @@ def main():
         number_of_fast_walkers = int(sys.argv[3])
         outputfilename = sys.argv[4]"""
 
-        walking_time = 1
-        number_of_usual_walkers = 0
+        walking_time = 10000
+        number_of_usual_walkers = 2
         number_of_fast_walkers = 1
-        number_of_running_walkers = 0
+        number_of_running_walkers = 1
         outputfilename = r"D:\Desktop\test_walker.png"
 
         number_of_walkers = (
@@ -259,8 +259,10 @@ def main():
         )
         assert (
             number_of_usual_walkers >= 0
-        ), "number_of_walkers must be greater than '1'. " "You stated '{}'".format(
-            number_of_walkers
+            and number_of_fast_walkers >= 0
+            and number_of_running_walkers
+        ), "the number of walkers can't be negative for any class. You stated '{}', '{}'and '{}' for the classes".format(
+            number_of_usual_walkers, number_of_fast_walkers, number_of_running_walkers
         )
         assert (
             number_of_walkers > 0
