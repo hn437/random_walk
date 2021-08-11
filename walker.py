@@ -93,7 +93,9 @@ def plot_the_paths(list_of_walkers: list, outputfilename: str) -> None:
     rows_of_plots = math.ceil(len(list_of_walkers) / 2)
 
     # create the subplots
-    figure, axis = plt.subplots(rows_of_plots, columns_of_plots, squeeze=False)
+    figure, axes = plt.subplots(rows_of_plots, columns_of_plots, squeeze=False)
+    figure.set_figheight(4.8 * rows_of_plots + 1)
+    flying_walkers = []
     for walker in enumerate(list_of_walkers):
         # get the walkers subplot and plot the path in it
         row = int(walker[0] / 2)
@@ -113,38 +115,41 @@ def plot_the_paths(list_of_walkers: list, outputfilename: str) -> None:
         end_array = np.array(end_coordinates)
         distance = start_array - end_array
         if np.absolute(distance[0]) and np.absolute(distance[1]) >= 50:
-            axis[row, column].plot(
+            axes[row, column].plot(
                 [start_coordinates[0], end_coordinates[0]],
                 [start_coordinates[1], end_coordinates[1]],
             )
-            axis[row, column].set_title(
-                f"Walker {walker[0] + 1} took a plane, "
-                f"because the distance was too long"
-            )
+            flying_walkers.append(walker[0] + 1)
         else:
-            axis[row, column].plot(walker[1].x_coordinates, walker[1].y_coordinates)
-            axis[row, column].set_title(f"Walker {walker[0] + 1} is {walker_type}")
-        axis[row, column].scatter(
+            axes[row, column].plot(walker[1].x_coordinates, walker[1].y_coordinates)
+        axes[row, column].scatter(
             walker[1].get_start_point()[0],
             walker[1].get_start_point()[1],
             label="Startposition",
             marker="o",
         )
-        axis[row, column].scatter(
+        axes[row, column].scatter(
             walker[1].get_end_point()[0],
             walker[1].get_end_point()[1],
             label="Endposition",
             marker="^",
         )
-        axis[row, column].legend()
+        axes[row, column].legend()
+        axes[row, column].set_title(f"Walker {walker[0] + 1} is {walker_type}")
 
     if len(list_of_walkers) % 2 != 0 and len(list_of_walkers) != 1:
         # if the number of walkers is odd, delete the last (unused) subplot
-        figure.delaxes(axis[(rows_of_plots - 1), 1])
+        figure.delaxes(axes[(rows_of_plots - 1), 1])
 
     # arange subplot to not interfere each other, save the figure to the outputfile and
     # show the plot to the user
-    figure.tight_layout()
+    if len(flying_walkers) > 0:
+        plt.figtext(
+            0.01,
+            0.01,
+            f"\nWalker(s) {flying_walkers} took a plane, as they don't walk such a long distance!",
+        )
+    figure.tight_layout(rect=[0, 0.01, 1, 1])
     plt.savefig(outputfilename)
     plt.show()
 
@@ -240,7 +245,8 @@ def main():
         """walking_time = int(sys.argv[1])
         number_of_usual_walkers = int(sys.argv[2])
         number_of_fast_walkers = int(sys.argv[3])
-        outputfilename = sys.argv[4]"""
+        number_of_running_walkers = int(sys.argv[4])
+        outputfilename = sys.argv[5]"""
 
         walking_time = 10000
         number_of_usual_walkers = 2
@@ -266,12 +272,12 @@ def main():
         )
         assert (
             number_of_walkers > 0
-        ), "number_of_walkers must be greater than '1'. " "You stated '{}'".format(
+        ), "The number of walkers must be greater than '1'. " "You stated {}".format(
             number_of_walkers
         )
         assert (
             number_of_walkers <= 12
-        ), "number_of_walkers must be max. '12'. " "You stated '{}'".format(
+        ), "The number of walkers must be max. '12'. " "You stated {}".format(
             number_of_walkers
         )
     except ValueError as err:
