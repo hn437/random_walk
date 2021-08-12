@@ -32,50 +32,34 @@ def create_walker(
     :return: a list, the 'scene' which contains all walker, so all objects and their
         coordinates
     """
-    try:
-        number_of_walker = (
-            number_of_usual_walker + number_of_fast_walker + number_of_running_walker
+    number_of_walker = (
+        number_of_usual_walker + number_of_fast_walker + number_of_running_walker
+    )
+    assert (
+        walking_time >= 1
+    ), "walking_time must be greater than '0'. " "You stated '{}'".format(
+        walking_time - 1
+    )
+    assert (
+        number_of_usual_walker >= 0
+        and number_of_fast_walker >= 0
+        and number_of_running_walker >= 0
+    ), (
+        "The number of walker can't be negative for any class. You stated '{}', "
+        "'{}' and '{}' for the walker classes".format(
+            number_of_usual_walker, number_of_fast_walker, number_of_running_walker
         )
-
-        assert (
-            walking_time >= 1
-        ), "walking_time must be greater than '0'. " "You stated '{}'".format(
-            walking_time - 1
-        )
-        assert (
-            number_of_usual_walker >= 0
-            and number_of_fast_walker >= 0
-            and number_of_running_walker >= 0
-        ), (
-            "The number of walker can't be negative for any class. You stated '{}', "
-            "'{}' and '{}' for the walker classes".format(
-                number_of_usual_walker, number_of_fast_walker, number_of_running_walker
-            )
-        )
-        assert (
-            number_of_walker > 0
-        ), "The number of walker must be greater than '1'. " "You stated {}".format(
-            number_of_walker
-        )
-        assert (
-            number_of_walker <= 12
-        ), "The number of walker must be max. '12'. " "You stated {}".format(
-            number_of_walker
-        )
-    except ValueError as err:
-        print(
-            "Error: one of the inputs was not correctly specified.\n"
-            "The Input must be specified as 'python walker.py walking_time "
-            "number_of_usual_walker number_of_fast_walker number_of_running_walker "
-            "outfile_name'.\n"
-            "Inputformats: walking time --> Integer, number of walker --> "
-            "Integer, outfile_name --> string\n"
-            "outfile_name: path_to_output/filename.png\n"
-            "The number of walker and the walking time must be positive & at least 1"
-            "\n\n\n",
-            err,
-        )
-        sys.exit(1)
+    )
+    assert (
+        number_of_walker > 0
+    ), "The number of walker must be greater than '1'. " "You stated {}".format(
+        number_of_walker
+    )
+    assert (
+        number_of_walker <= 12
+    ), "The number of walker must be max. '12'. " "You stated {}".format(
+        number_of_walker
+    )
 
     scene = []
     for _ in range(number_of_usual_walker):
@@ -289,11 +273,26 @@ class Walker:
 def main():
     """The main program. Assigns the user definitions, creates the scene and plots it"""
     # read in specifications defined by the user
-    walking_time = int(sys.argv[1])
-    number_of_usual_walker = int(sys.argv[2])
-    number_of_fast_walker = int(sys.argv[3])
-    number_of_running_walker = int(sys.argv[4])
-    outfile_name = sys.argv[5]
+    try:
+        walking_time = int(sys.argv[1])
+        number_of_usual_walker = int(sys.argv[2])
+        number_of_fast_walker = int(sys.argv[3])
+        number_of_running_walker = int(sys.argv[4])
+        outfile_name = sys.argv[5]
+    except (SyntaxError, IndexError, ValueError) as err:
+        print(
+            "Error: At least one of the inputs was not correctly specified.\n"
+            "The Input must be specified as 'python walker.py walking_time "
+            "number_of_usual_walker number_of_fast_walker number_of_running_walker "
+            "outfile_name'.\n"
+            "Inputformats: walking time --> Integer, number of walker --> "
+            "Integer, outfile_name --> string\n"
+            "outfile_name: path_to_output/filename.png\n"
+            "The number of walker and the walking time must be positive & at least 1"
+            "\n\n\n",
+            err,
+        )
+        sys.exit(1)
 
     scene = create_walker(
         walking_time,
