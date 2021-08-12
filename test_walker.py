@@ -232,7 +232,7 @@ def test_get_end_point():
 
 
 def test_plotting():
-    """Test that an image is written by the function plot_the_paths () and that it can
+    """Test that an image is written by the function plot_the_paths() and that it can
     be opened"""
     walking_time = 1
     walking_speed = 1
