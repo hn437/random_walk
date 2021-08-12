@@ -10,17 +10,17 @@ a map of the route the walker took returned! But be aware: if you let the walker
 far, he might rather take a plane...
 
 
-## How to use the script
+## How to use the Script
 In order to use the script, you have to clone this repository to your drive and the 
 following libraries need to be installed your python environment:
 ### Dependencies
 For running:
-- Python3
-- NumPy
-- Matplotlib
+- Python 3.7.10
+- NumPy 1.20.3
+- Matplotlib 3.3.4
 
 For testing if the script is executed correctly:
-- pytest
+- pytest 6.2.4
 
 ### Usage
 To use the script, you need to navigate to the cloned repository on your machine from 
