@@ -236,10 +236,11 @@ def test_plotting():
     be opened"""
     walking_time = 1
     walking_speed = 1
+    outfile_name = "test_image.png"
     test_walker = walker.Walker(walking_time, walking_speed)
     test_walker.calculate_the_path()
     with tempfile.TemporaryDirectory() as tmp_dirname:
-        outfile = os.path.join(tmp_dirname, "test_image.png")
+        outfile = os.path.join(tmp_dirname, outfile_name)
         walker.plot_the_paths([test_walker], outfile)
         image = imread(outfile)
         assert len(image.shape) == 3
