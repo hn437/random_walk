@@ -42,66 +42,30 @@ def create_walkers(
     return scene
 
 
-def calculate_next_step(step_number: int, x_coord: np.ndarray, y_coord: np.ndarray):
-    """
-
-    :param step_number:
-    :param x_coord:
-    :param y_coord:
-    :return:
-    """
-    direction_of_step = np.random.randint(1, 5)
-    if direction_of_step == 1:  # east
-        x_coord[step_number] = x_coord[step_number - 1] + 1
-        y_coord[step_number] = y_coord[step_number - 1]
-    elif direction_of_step == 2:  # west
-        x_coord[step_number] = x_coord[step_number - 1] - 1
-        y_coord[step_number] = y_coord[step_number - 1]
-    elif direction_of_step == 3:  # north
-        x_coord[step_number] = x_coord[step_number - 1]
-        y_coord[step_number] = y_coord[step_number - 1] + 1
-    else:  # south
-        x_coord[step_number] = x_coord[step_number - 1]
-        y_coord[step_number] = y_coord[step_number - 1] - 1
-    return x_coord, y_coord
-
-
-def create_building(walker_x_startcoordinate: np.ndarray, walker_y_startcoordinate: np.ndarray, number_of_steps: int) -> list:
+def create_building(
+    walker_x_startcoordinate: np.ndarray,
+    walker_y_startcoordinate: np.ndarray,
+    number_of_steps: int,
+) -> list:
     """
 
     :param walker_x_startcoordinate:
     :param walker_y_startcoordinate:
     :return:
     """
-    xmin = float(walker_x_startcoordinate) + float(math.ceil(number_of_steps/50)) + 0.5
-    xmax = xmin + math.ceil(number_of_steps/20)
-    ymin = float(walker_y_startcoordinate) + float(math.ceil(number_of_steps/50)) + 0.5
-    ymax = ymin + math.ceil(number_of_steps/10)
+    xmin = (
+        float(walker_x_startcoordinate)
+        + float(math.ceil(number_of_steps / number_of_steps * 1.1))
+        + 0.5
+    )
+    xmax = xmin + 30
+    ymin = (
+        float(walker_y_startcoordinate)
+        + float(math.ceil(number_of_steps / number_of_steps * 1.1))
+        + 0.5
+    )
+    ymax = ymin + 10
     return [xmin, xmax, ymin, ymax]
-
-
-def calculate_the_path(number_of_steps: int) -> tuple:
-    """
-    Calculates the path the walker walks
-    :param number_of_steps: the number of steps the walker takes
-    :return: all x- and all y- coordinates of points the walker visits as well as its
-        starting and endposition
-    """
-    # create random coordinates
-    x_coord = np.random.randint(low=0, high=number_of_steps, size=(number_of_steps, 1))
-    y_coord = np.random.randint(low=0, high=number_of_steps, size=(number_of_steps, 1))
-
-    # initiate building
-    building = create_building(x_coord[0], y_coord[0], number_of_steps)
-
-    # calculate new coordinates for each step
-    for step_number in range(1, number_of_steps):
-        x_coord, y_coord = calculate_next_step(step_number, x_coord, y_coord)
-        while x_coord[step_number] > building[0] and x_coord[step_number] < building[1] and y_coord[step_number] > building[2] and y_coord[step_number] > building[3]:
-            x_coord, y_coord = calculate_next_step(step_number, x_coord, y_coord)
-
-    # return all coordinates and positions of the path
-    return x_coord, y_coord, building
 
 
 def plot_the_paths(list_of_walkers: list, outputfilename: str) -> None:
@@ -148,7 +112,23 @@ def plot_the_paths(list_of_walkers: list, outputfilename: str) -> None:
             flying_walkers.append(walker[0] + 1)
         else:
             axes[row, column].plot(walker[1].x_coordinates, walker[1].y_coordinates)
-        axes[row, column].plot([walker[1].building[0], walker[1].building[1], walker[1].building[1], walker[1].building[0], walker[1].building[0]], [walker[1].building[2], walker[1].building[2], walker[1].building[3], walker[1].building[3], walker[1].building[2]], c='black')
+        axes[row, column].plot(
+            [
+                walker[1].building[0],
+                walker[1].building[1],
+                walker[1].building[1],
+                walker[1].building[0],
+                walker[1].building[0],
+            ],
+            [
+                walker[1].building[2],
+                walker[1].building[2],
+                walker[1].building[3],
+                walker[1].building[3],
+                walker[1].building[2],
+            ],
+            c="black",
+        )
         axes[row, column].scatter(
             walker[1].get_start_point()[0],
             walker[1].get_start_point()[1],
@@ -188,10 +168,37 @@ class Walker:
     def __init__(self, walking_time: int, walking_speed: int):
         self.walking_speed = walking_speed
         self.walking_time = walking_time
-        (
-            self.x_coordinates,
-            self.y_coordinates, self.building
-        ) = calculate_the_path(self.walking_time * self.walking_speed + 1)
+        (self.x_coordinates, self.y_coordinates, self.building) = self.calculate_the_path()
+
+    def calculate_the_path(self) -> tuple:
+        """
+        Calculates the path the walker walks
+        :param number_of_steps: the number of steps the walker takes
+        :return: all x- and all y- coordinates of points the walker visits as well as its
+            starting and endposition
+        """
+        # calculate the number of steps
+        number_of_steps = self.walking_time * self.walking_speed + 1
+        # create random coordinates
+        x_coord = np.random.randint(low=0, high=number_of_steps, size=number_of_steps)
+        y_coord = np.random.randint(low=0, high=number_of_steps, size=number_of_steps)
+
+        # initiate building
+        building = create_building(x_coord[0], y_coord[0], number_of_steps)
+
+        # calculate new coordinates for each step
+        for step_number in range(1, number_of_steps):
+            x_coord, y_coord = self.calculate_next_step(step_number, x_coord, y_coord)
+            while (
+                    (x_coord[step_number] > building[0])
+                    and (x_coord[step_number] < building[1])
+                    and (y_coord[step_number] > building[2])
+                    and (y_coord[step_number] < building[3])
+            ):
+                x_coord, y_coord = self.calculate_next_step(step_number, x_coord, y_coord)
+
+        # return all coordinates and positions of the path
+        return x_coord, y_coord, building
 
     def get_start_point(self) -> list:
         """
@@ -208,6 +215,33 @@ class Walker:
             as the second element
         """
         return [self.x_coordinates[-1], self.y_coordinates[-1]]
+
+    def calculate_next_step(self, step_number: int, x_coord: np.ndarray, y_coord: np.ndarray):
+        """
+        This is a helper function which is used by the function calculate_the_path. It
+            is executed each time the next step needs to be calculated or if the walker
+            would walk into the building
+        :param step_number: The number of step to be calculated
+        :param x_coord: the array of x-coordinates, of which the one at position
+            step_number will be calculated
+        :param y_coord: the array of y-coordinates, of which the one at position
+            step_number will be calculated
+        :return: the updated coordinate arrays
+        """
+        direction_of_step = np.random.randint(1, 5)
+        if direction_of_step == 1:  # east
+            x_coord[step_number] = x_coord[step_number - 1] + 1
+            y_coord[step_number] = y_coord[step_number - 1]
+        elif direction_of_step == 2:  # west
+            x_coord[step_number] = x_coord[step_number - 1] - 1
+            y_coord[step_number] = y_coord[step_number - 1]
+        elif direction_of_step == 3:  # north
+            x_coord[step_number] = x_coord[step_number - 1]
+            y_coord[step_number] = y_coord[step_number - 1] + 1
+        else:  # south
+            x_coord[step_number] = x_coord[step_number - 1]
+            y_coord[step_number] = y_coord[step_number - 1] - 1
+        return x_coord, y_coord
 
 
 def main():
