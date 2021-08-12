@@ -1,13 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """A Random Walk Simulation For Multiple Walker"""
-
+# based on the idea of:
 # Python code for 2D random walk.
 # Source: https://www.geeksforgeeks.org/random-walk-implementation-python/
-import sys
+
 import math
-import numpy as np
+import sys
+
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 def create_walker(
@@ -65,10 +67,10 @@ def create_walker(
             "Error: one of the inputs was not correctly specified.\n"
             "The Input must be specified as 'python walker.py walking_time "
             "number_of_usual_walker number_of_fast_walker number_of_running_walker "
-            "outfilename'.\n"
+            "outfile_name'.\n"
             "Inputformats: walking time --> Integer, number of walker --> "
-            "Integer, outfilename --> string\n"
-            "outfilename: path_to_output/filename.png\n"
+            "Integer, outfile_name --> string\n"
+            "outfile_name: path_to_output/filename.png\n"
             "The number of walker and the walking time must be positive & at least 1"
             "\n\n\n",
             err,
@@ -91,13 +93,13 @@ def create_walker(
     return scene
 
 
-def plot_the_paths(list_of_walker: list, outfilename: str) -> None:
+def plot_the_paths(list_of_walker: list, outfile_name: str) -> None:
     """
     Creates the plots of the calculated paths of the walker as well as the building
         next to it
     :param list_of_walker: A list holding the walker objects. Each object holds the
         coordinates of the respective path the walker walked.
-    :param outfilename: The file which will be created with the plotted paths
+    :param outfile_name: The file which will be created with the plotted paths
     """
     # define the number of rows and columns of subplots
     if len(list_of_walker) == 1:
@@ -186,7 +188,7 @@ def plot_the_paths(list_of_walker: list, outfilename: str) -> None:
             ha="center",
         )
     figure.tight_layout(rect=[0, 0.01, 1, 1])
-    plt.savefig(outfilename)
+    plt.savefig(outfile_name)
     plt.show()
 
 
@@ -291,7 +293,7 @@ def main():
     number_of_usual_walker = int(sys.argv[2])
     number_of_fast_walker = int(sys.argv[3])
     number_of_running_walker = int(sys.argv[4])
-    outfilename = sys.argv[5]
+    outfile_name = sys.argv[5]
 
     scene = create_walker(
         walking_time,
@@ -299,7 +301,7 @@ def main():
         number_of_fast_walker,
         number_of_running_walker,
     )
-    plot_the_paths(scene, outfilename)
+    plot_the_paths(scene, outfile_name)
 
 
 if __name__ == "__main__":
