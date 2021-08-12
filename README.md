@@ -1,29 +1,52 @@
-# Instructions for the random walker scipt:
+# A Random Walk Simulation:
 
-The random walker creates a random path for a number of steps and number of walkers, specified by the user. The output is an image, which shows the walk for every walker in different
-plots.
+In this repository you can find a basic implementation of a random walk simulation in a 
+2-dimensional space. The scenario is always the same: Our walker is bored with being 
+inside, he rather goes for a stroll outside. So, the walker leaves the house and starts 
+walking, without any destination in mind… and refuses to go back inside! 
 
-## Instructions to the user 
-
-1. Clone the repository from Github 
-2. Move to the cloned repository via the command line 
-3. Specify the number of steps, the number of walkers and the name of the outputfile (as can be seen in the screenshot below)
-		Important: **the number of walkers cannot be higher than 12** 
-4. You need to call the script with python, writing: python walker.py ... 
-5. For example: python walker.py 10 4 ./test_image.png
-
-		100000		= number of steps
+You can specify for how long the walker should walk and at what pace. You’ll get 
+a map of the route the walker took returned! But be aware: if you let the walker walk to
+far, he might rather take a plane...
 
 
-		4		= number of walkers
+## How to use the script
+In order to use the script, you have to clone this repository to your drive and the 
+following libraries need to be installed your python environment:
+### Dependencies
+For running:
+- Python3
+- NumPy
+- Matplotlib
 
-		./test_image.pn = name of the outputfile 
+For testing if the script is executed correctly:
+- pytest
 
+### Usage
+To use the script, you need to navigate to the cloned repository on your machine from 
+the command line. If you're in your directory and the correct python environment is 
+activated, you can run the script. Therefore, you state the command `python walker.py ` 
+followed by your settings. You have to specify the following settings:
+````
+1. The walking time
+2. The number of walker who are walking at usual speed
+3. The number of walker who are walking fast
+4. The number of walker who are running
+5. The path the outfile should be saved at
+````
 
-Example for setting the parameters: 
+However, note that all settings have to be defined, so if you want to have a single 
+walker, just define all the others as 0. Furthermore, a maximum of 12 walker overall are
+allowed. 
 
-![image](https://github.com/hn437/random_walk/blob/main/screenshot_readme.PNG)
+As an example, you would need to state the following command to get the walking maps of 
+two walker at usual speed, one fast-walking walker and a running walker if you let them 
+walk over a time of 1000:
 
-Example for the output:
+`python walker.py 1000 2 1 1 ./TheRoutesOfMyWalker.png`
 
-![image](https://github.com/hn437/random_walk/blob/main/output.png)
+The resulting image of the maps would look similar to the one below:
+
+![image](https://github.com/hn437/random_walk/blob/main/TheRoutesOfMyWalker.png)
+
+### And now: let them walk!
