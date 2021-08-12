@@ -104,7 +104,7 @@ def plot_the_paths(list_of_walker: list, outfile_name: str) -> None:
         else:
             column = 1
         if walker[1].walking_speed == 1:
-            walker_type = "walking at usual speed"
+            walker_type = "walking casually"
         elif walker[1].walking_speed == 2:
             walker_type = "walking fast"
         elif walker[1].walking_speed == 4:
