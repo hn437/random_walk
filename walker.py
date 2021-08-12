@@ -44,8 +44,11 @@ def create_walker(
             number_of_usual_walker >= 0
             and number_of_fast_walker >= 0
             and number_of_running_walker >= 0
-        ), "The number of walker can't be negative for any class. You stated '{}', '{}'and '{}' for the walker classes".format(
-            number_of_usual_walker, number_of_fast_walker, number_of_running_walker
+        ), (
+            "The number of walker can't be negative for any class. You stated '{}', "
+            "'{}' and '{}' for the walker classes".format(
+                number_of_usual_walker, number_of_fast_walker, number_of_running_walker
+            )
         )
         assert (
             number_of_walker > 0
@@ -62,10 +65,10 @@ def create_walker(
             "Error: one of the inputs was not correctly specified.\n"
             "The Input must be specified as 'python walker.py walking_time "
             "number_of_usual_walker number_of_fast_walker number_of_running_walker "
-            "outputfilename'.\n"
+            "outfilename'.\n"
             "Inputformats: walking time --> Integer, number of walker --> "
-            "Integer, outputfilename --> string\n"
-            "outputfilename: path_to_output/filename.png\n"
+            "Integer, outfilename --> string\n"
+            "outfilename: path_to_output/filename.png\n"
             "The number of walker and the walking time must be positive & at least 1"
             "\n\n\n",
             err,
@@ -88,13 +91,13 @@ def create_walker(
     return scene
 
 
-def plot_the_paths(list_of_walker: list, outputfilename: str) -> None:
+def plot_the_paths(list_of_walker: list, outfilename: str) -> None:
     """
     Creates the plots of the calculated paths of the walker as well as the building
         next to it
     :param list_of_walker: A list holding the walker objects. Each object holds the
         coordinates of the respective path the walker walked.
-    :param outputfilename: The file which will be created with the plotted paths
+    :param outfilename: The file which will be created with the plotted paths
     """
     # define the number of rows and columns of subplots
     if len(list_of_walker) == 1:
@@ -149,7 +152,7 @@ def plot_the_paths(list_of_walker: list, outputfilename: str) -> None:
                 walker[1].building[2],
             ],
             c="grey",
-            label="Building"
+            label="Building",
         )
         axes[row, column].scatter(
             walker[1].get_start_point()[0],
@@ -172,7 +175,7 @@ def plot_the_paths(list_of_walker: list, outputfilename: str) -> None:
         # if the number of walker is odd, delete the last (unused) subplot
         figure.delaxes(axes[(rows_of_plots - 1), 1])
 
-    # arange subplot to not interfere each other, save the figure to the outputfile and
+    # arrange subplot to not interfere each other, save the figure to the outfile and
     # show the plot to the user
     if len(flying_walker) > 0:
         plt.figtext(
@@ -183,7 +186,7 @@ def plot_the_paths(list_of_walker: list, outputfilename: str) -> None:
             ha="center",
         )
     figure.tight_layout(rect=[0, 0.01, 1, 1])
-    plt.savefig(outputfilename)
+    plt.savefig(outfilename)
     plt.show()
 
 
@@ -284,17 +287,11 @@ class Walker:
 def main():
     """The main program. Assigns the user definitions, creates the scene and plots it"""
     # read in specifications defined by the user
-    """walking_time = int(sys.argv[1])
+    walking_time = int(sys.argv[1])
     number_of_usual_walker = int(sys.argv[2])
     number_of_fast_walker = int(sys.argv[3])
     number_of_running_walker = int(sys.argv[4])
-    outputfilename = sys.argv[5]"""
-
-    walking_time = 10000
-    number_of_usual_walker = 2
-    number_of_fast_walker = 1
-    number_of_running_walker = 1
-    outputfilename = r"D:\Desktop\test_walker.png"
+    outfilename = sys.argv[5]
 
     scene = create_walker(
         walking_time,
@@ -302,7 +299,7 @@ def main():
         number_of_fast_walker,
         number_of_running_walker,
     )
-    plot_the_paths(scene, outputfilename)
+    plot_the_paths(scene, outfilename)
 
 
 if __name__ == "__main__":
