@@ -133,7 +133,7 @@ def plot_the_paths(list_of_walker: list, outputfilename: str) -> None:
             flying_walker.append(walker[0] + 1)
         else:
             axes[row, column].plot(walker[1].x_coordinates, walker[1].y_coordinates)
-        axes[row, column].plot(
+        axes[row, column].fill(
             [
                 walker[1].building[0],
                 walker[1].building[1],
@@ -148,7 +148,8 @@ def plot_the_paths(list_of_walker: list, outputfilename: str) -> None:
                 walker[1].building[3],
                 walker[1].building[2],
             ],
-            c="black",
+            c="grey",
+            label="Building"
         )
         axes[row, column].scatter(
             walker[1].get_start_point()[0],
