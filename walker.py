@@ -93,7 +93,7 @@ def plot_the_paths(list_of_walker: list, outfile_name: str) -> None:
     rows_of_plots = math.ceil(len(list_of_walker) / 2)
 
     # create the subplots
-    figure, axes = plt.subplots(rows_of_plots, columns_of_plots, squeeze=False, dpi=300)
+    figure, axes = plt.subplots(rows_of_plots, columns_of_plots, squeeze=False)
     figure.set_figheight(4.8 * rows_of_plots + 1)
     flying_walker = []
     for walker in enumerate(list_of_walker):
