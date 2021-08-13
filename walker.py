@@ -1,138 +1,306 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""A Random Walk Simulation For Multiple Walkers"""
-
+"""A Random Walk Simulation For Multiple Walker"""
+# based on the idea of:
 # Python code for 2D random walk.
 # Source: https://www.geeksforgeeks.org/random-walk-implementation-python/
-import sys
+
 import math
-import numpy as np
+import sys
+
 import matplotlib.pyplot as plt
+import numpy as np
 
 
-def create_walkers(number_of_steps, number_of_walkers):
+def create_walker(
+    walking_time: int,
+    number_of_usual_walker: int,
+    number_of_fast_walker: int,
+    number_of_running_walker: int,
+) -> list:
     """
-    Creates a list of numpy arrays which each hold the coordinates of a walker. The coordinates
-    are randomly chosen in a range from 0 to the number of steps
-    :param number_of_steps: the number of steps the walker will make. This defines the
-    dimension of the array which represents the walker
-    :param number_of_walkers: the number of walkers defines the number of arrays, which
-    will be created
-    :return: a list, the 'scene' which contains all walkers, so all arrays containing coordinates
+    Checks if all user definitions of the walker are valid. If so, Creates a list of
+        all walker objects and calculates their paths.
+    :param walking_time: the 'time' each walker walks and therefore (depending on it's
+        respective speed) the number of steps the walker will make
+    :param number_of_usual_walker: the number of usual walker defines the number of
+        objects of this respective class which will be appended to the scene
+    :param number_of_fast_walker:the number of fast walker defines the number of
+        objects of this respective class which will be appended to the scene
+    :param number_of_running_walker: the number of running walker defines the number
+        of objects of this respective class which will be appended to the scene
+    :return: a list, the 'scene' which contains all walker, so all objects and their
+        coordinates
     """
+    number_of_walker = (
+        number_of_usual_walker + number_of_fast_walker + number_of_running_walker
+    )
+    assert (
+        walking_time >= 1
+    ), "walking_time must be greater than '0'. " "You stated '{}'".format(
+        walking_time - 1
+    )
+    assert (
+        number_of_usual_walker >= 0
+        and number_of_fast_walker >= 0
+        and number_of_running_walker >= 0
+    ), (
+        "The number of walker can't be negative for any class. You stated '{}', "
+        "'{}' and '{}' for the walker classes".format(
+            number_of_usual_walker, number_of_fast_walker, number_of_running_walker
+        )
+    )
+    assert (
+        number_of_walker > 0
+    ), "The number of walker must be greater than '1'. " "You stated {}".format(
+        number_of_walker
+    )
+    assert (
+        number_of_walker <= 12
+    ), "The number of walker must be max. '12'. " "You stated {}".format(
+        number_of_walker
+    )
+
     scene = []
-    for _ in range(number_of_walkers):
+    for _ in range(number_of_usual_walker):
         # create the array of a walker and add it to the scene-list
-        walker = np.random.randint(low=0, high=number_of_steps,
-                                    size=(number_of_steps, 2))
-        scene.append(walker)
-
+        scene.append(Walker(walking_time, 1))
+    for _ in range(number_of_fast_walker):
+        # create the array of a walker and add it to the scene-list
+        scene.append(Walker(walking_time, 2))
+    for _ in range(number_of_running_walker):
+        # create the array of a running walker and add it to the scene-list
+        scene.append(Walker(walking_time, 4))
+    for walker in scene:
+        walker.calculate_the_path()
+        continue
     return scene
 
 
-def calculate_the_path(walker, number_of_steps):
+def plot_the_paths(list_of_walker: list, outfile_name: str) -> None:
     """
-    Calculates the path the walker walks
-    :param walker: The array representing the walker, holding random coordinates
-    :param number_of_steps: the number of steps the walker takes
-    :return: the updated array representing the walker, holding all coordinates the walker walks to
-    """
-    # split coordinates
-    x_coord = walker[:, 0]
-    y_coord = walker[:, 1]
-
-    # calculate new coordinates for each step
-    for stepnumber in range(1, number_of_steps):
-        direction_of_step = np.random.randint(1, 5)
-        if direction_of_step == 1:      # east
-            x_coord[stepnumber] = x_coord[stepnumber - 1] + 1
-            y_coord[stepnumber] = y_coord[stepnumber - 1]
-        elif direction_of_step == 2:    # west
-            x_coord[stepnumber] = x_coord[stepnumber - 1] - 1
-            y_coord[stepnumber] = y_coord[stepnumber - 1]
-        elif direction_of_step == 3:    # north
-            x_coord[stepnumber] = x_coord[stepnumber - 1]
-            y_coord[stepnumber] = y_coord[stepnumber - 1] + 1
-        else:                           # south
-            x_coord[stepnumber] = x_coord[stepnumber - 1]
-            y_coord[stepnumber] = y_coord[stepnumber - 1] - 1
-
-    # return all coordinates of the path
-    return walker
-
-
-def plot_the_paths(list_of_walkers, outputfilename):
-    """
-    Creates the plot of the calculated path of the walker
-    :param list_of_walkers: Arrays representing the walkers. Each array holds the
-    coordinates of the respective path the walker walked.
-    :param outputfilename: The file which will be created with the plotted paths
+    Creates the plots of the calculated paths of the walker as well as the building
+        next to it
+    :param list_of_walker: A list holding the walker objects. Each object holds the
+        coordinates of the respective path the walker walked.
+    :param outfile_name: The file which will be created with the plotted paths
     """
     # define the number of rows and columns of subplots
-    if len(list_of_walkers) == 1:
+    if len(list_of_walker) == 1:
         columns_of_plots = 1
     else:
         columns_of_plots = 2
-    rows_of_plots = math.ceil(len(list_of_walkers)/2)
+    rows_of_plots = math.ceil(len(list_of_walker) / 2)
 
     # create the subplots
-    figure, axis = plt.subplots(rows_of_plots, columns_of_plots, squeeze=False)
-    for counter in enumerate(list_of_walkers):
-        # get the coordinates of this walker, get its subplot and plot the path in it
-        x_coords = counter[1][:, 0]
-        y_coords = counter[1][:, 1]
-
-        row = int(counter[0]/2)
-        if counter[0] % 2 == 0:
+    figure, axes = plt.subplots(rows_of_plots, columns_of_plots, squeeze=False)
+    figure.set_figheight(4.8 * rows_of_plots + 1)
+    flying_walker = []
+    for walker in enumerate(list_of_walker):
+        # get the walker subplot and plot the path in it
+        row = int(walker[0] / 2)
+        if walker[0] % 2 == 0:
             column = 0
         else:
             column = 1
+        if walker[1].walking_speed == 1:
+            walker_type = "walking casually"
+        elif walker[1].walking_speed == 2:
+            walker_type = "walking fast"
+        elif walker[1].walking_speed == 4:
+            walker_type = "running"
+        start_coordinates = np.array(walker[1].get_start_point())
+        end_coordinates = np.array(walker[1].get_end_point())
+        distance = start_coordinates - end_coordinates
+        if (
+            math.sqrt(distance[0] ** 2 + distance[1] ** 2)
+        ) >= 150:  # pythagorean theorem
+            axes[row, column].plot(
+                [start_coordinates[0], end_coordinates[0]],
+                [start_coordinates[1], end_coordinates[1]],
+            )
+            flying_walker.append(walker[0] + 1)
+        else:
+            axes[row, column].plot(walker[1].x_coordinates, walker[1].y_coordinates)
+        axes[row, column].fill(
+            [
+                walker[1].building[0],
+                walker[1].building[1],
+                walker[1].building[1],
+                walker[1].building[0],
+                walker[1].building[0],
+            ],
+            [
+                walker[1].building[2],
+                walker[1].building[2],
+                walker[1].building[3],
+                walker[1].building[3],
+                walker[1].building[2],
+            ],
+            c="grey",
+            label="Building",
+        )
+        axes[row, column].scatter(
+            walker[1].get_start_point()[0],
+            walker[1].get_start_point()[1],
+            label="Startposition",
+            marker="o",
+            c="turquoise",
+        )
+        axes[row, column].scatter(
+            walker[1].get_end_point()[0],
+            walker[1].get_end_point()[1],
+            label="Endposition",
+            marker="^",
+            c="orange",
+        )
+        axes[row, column].legend()
+        axes[row, column].set_title(f"Walker {walker[0] + 1} is {walker_type}")
 
-        axis[row, column].plot(x_coords, y_coords)
-        axis[row, column].set_title(f'Walker {counter[0]+1}')
+    if len(list_of_walker) % 2 != 0 and len(list_of_walker) != 1:
+        # if the number of walker is odd, delete the last (unused) subplot
+        figure.delaxes(axes[(rows_of_plots - 1), 1])
 
-    if len(list_of_walkers) % 2 != 0 and len(list_of_walkers) != 1:
-        # if the number of walkers is odd, delete the last (unused) subplot
-        figure.delaxes(axis[(rows_of_plots - 1), 1])
-
-    # arange subplot to not interfere each other, save the figure to the outputfile and
+    # arrange subplot to not interfere each other, save the figure to the outfile and
     # show the plot to the user
-    figure.tight_layout()
-    plt.savefig(outputfilename)
+    if len(flying_walker) > 0:
+        plt.figtext(
+            0.5,
+            0.01,
+            f"\nWalker(s) {flying_walker} took a plane, as they don't want to walk"
+            f"such a long distance!",
+            ha="center",
+        )
+    figure.tight_layout(rect=[0, 0.01, 1, 1])
+    plt.savefig(outfile_name)
     plt.show()
 
 
-def main():
-    """The main program. Reads in the user definitions, creates the scene, calculates
-    the path and plots it"""
-    try:
-        # read in specifications defined by the user
-        number_of_steps = int(sys.argv[1]) + 1
-        number_of_walkers = int(sys.argv[2])
-        outputfilename = sys.argv[3]
+class Walker:
+    """Represents a walker to which a walking speed and walking time are given"""
 
-        assert number_of_steps > 1, "number_of_steps must be greater than '0'. " \
-                                    "You stated '{}'".format(number_of_steps - 1)
-        assert number_of_walkers > 0, "number_of_walkers must be greater than '1'. " \
-                                      "You stated '{}'".format(number_of_walkers)
-        assert number_of_walkers <= 12, "number_of_walkers must be max. '12'. " \
-                                        "You stated '{}'".format(number_of_walkers)
-    except ValueError as err:
-        print("Error: one of the inputs was not correctly specified.\n"
-              "The Input must be specified as 'python main.py number_of_steps "
-              "number_of_walkers outputfilename'.\n"
-              "Inputformats: number_of_steps --> Integer, number_of_walkers --> "
-              "Integer, outputfilename --> string\n"
-              "outputfilename: path_to_output/filename.png\n"
-              "The number of walkers and the number of steps to be made must be "
-              "positive & at least 1\n\n\n",
-              err)
+    def __init__(self, walking_time: int, walking_speed: int):
+        self.walking_speed = walking_speed
+        self.walking_time = walking_time
+        self.number_of_steps = self.walking_time * self.walking_speed + 1
+        (self.x_coordinates, self.y_coordinates) = self.assign_random_coordinates()
+        self.building = self.create_building()
+
+    def assign_random_coordinates(self) -> tuple:
+        """
+        This function creates random coordinates, as many as the walker does steps.
+            These will be updated later when the walker walks by calling the function
+            calculate_the_path()
+        :return: A tuple of two arrays holding the x- or y-coordinates
+        """
+        # create random coordinates
+        x_coord = np.random.randint(
+            low=0, high=self.number_of_steps, size=self.number_of_steps
+        )
+        y_coord = np.random.randint(
+            low=0, high=self.number_of_steps, size=self.number_of_steps
+        )
+        return x_coord, y_coord
+
+    def calculate_the_path(self) -> None:
+        """
+        Calculates the path the walker walks by updating each position and checking if
+        the walker does not collide with the building.
+        """
+        # calculate new coordinates for each step
+        for step_number in range(1, self.number_of_steps):
+            self.calculate_next_step(step_number)
+            while (
+                (self.x_coordinates[step_number] > self.building[0])
+                and (self.x_coordinates[step_number] < self.building[1])
+                and (self.y_coordinates[step_number] > self.building[2])
+                and (self.y_coordinates[step_number] < self.building[3])
+            ):
+                self.calculate_next_step(step_number)
+
+    def get_start_point(self) -> list:
+        """
+        gets the starting position of the walker
+        :return: a list with the x-coordinate as the first element and the y-coordinate
+            as the second element
+        """
+        return [self.x_coordinates[0], self.y_coordinates[0]]
+
+    def get_end_point(self) -> list:
+        """
+        gets the last position of the walker
+        :return: a list with the x-coordinate as the first element and the y-coordinate
+            as the second element
+        """
+        return [self.x_coordinates[-1], self.y_coordinates[-1]]
+
+    def calculate_next_step(self, step_number: int) -> None:
+        """
+        This is a helper function which is used by the function calculate_the_path. It
+            is executed each time the next step needs to be calculated or if the walker
+            would walk into the building. It takes a random direction and updates the
+            coordinates from the position before and adds a step according to the
+            randomly determined direction
+        :param step_number: The number of step to be calculated
+        """
+        direction_of_step = np.random.randint(1, 5)
+        if direction_of_step == 1:  # east
+            self.x_coordinates[step_number] = self.x_coordinates[step_number - 1] + 1
+            self.y_coordinates[step_number] = self.y_coordinates[step_number - 1]
+        elif direction_of_step == 2:  # west
+            self.x_coordinates[step_number] = self.x_coordinates[step_number - 1] - 1
+            self.y_coordinates[step_number] = self.y_coordinates[step_number - 1]
+        elif direction_of_step == 3:  # north
+            self.x_coordinates[step_number] = self.x_coordinates[step_number - 1]
+            self.y_coordinates[step_number] = self.y_coordinates[step_number - 1] + 1
+        else:  # south
+            self.x_coordinates[step_number] = self.x_coordinates[step_number - 1]
+            self.y_coordinates[step_number] = self.y_coordinates[step_number - 1] - 1
+
+    def create_building(self) -> list:
+        """
+        This function calculates the building of the walker. It's a rectangle north of
+            the walker starting position
+        :return: a list holding the 4 coordinates of the building
+        """
+        xmin = float(self.get_start_point()[0]) - 20.5
+        xmax = xmin + 40
+        ymin = float(self.get_start_point()[1]) + 0.5
+        ymax = ymin + 15
+        return [xmin, xmax, ymin, ymax]
+
+
+def main():
+    """The main program. Assigns the user definitions, creates the scene and plots it"""
+    # read in specifications defined by the user
+    try:
+        walking_time = int(sys.argv[1])
+        number_of_usual_walker = int(sys.argv[2])
+        number_of_fast_walker = int(sys.argv[3])
+        number_of_running_walker = int(sys.argv[4])
+        outfile_name = sys.argv[5]
+    except (SyntaxError, IndexError, ValueError) as err:
+        print(
+            "Error: At least one of the inputs was not correctly specified.\n"
+            "The Input must be specified as 'python walker.py walking_time "
+            "number_of_usual_walker number_of_fast_walker number_of_running_walker "
+            "outfile_name'.\n"
+            "Inputformats: walking time --> Integer, number of walker --> "
+            "Integer, outfile_name --> string\n"
+            "outfile_name: path_to_output/filename.png\n"
+            "The number of walker and the walking time must be positive & at least 1"
+            "\n\n\n",
+            err,
+        )
         sys.exit(1)
 
-    scene = create_walkers(number_of_steps, number_of_walkers)
-    for walker in scene:
-        walker = calculate_the_path(walker, number_of_steps)
-    plot_the_paths(scene, outputfilename)
+    scene = create_walker(
+        walking_time,
+        number_of_usual_walker,
+        number_of_fast_walker,
+        number_of_running_walker,
+    )
+    plot_the_paths(scene, outfile_name)
 
 
 if __name__ == "__main__":
